@@ -3,9 +3,11 @@
   "specifiers": {
     "jsr:@std/assert@^1.0.16": "1.0.16",
     "jsr:@std/internal@^1.0.12": "1.0.12",
+    "jsr:@xan/observable-materialize@0.2": "0.2.0",
     "jsr:@xan/observable-of@0.1": "0.1.0",
     "jsr:@xan/observable-thrown@0.1": "0.1.0",
     "jsr:@xan/observable@0.1": "0.1.0",
+    "jsr:@xan/observable@0.2": "0.2.0",
     "jsr:@xan/observer@0.1": "0.1.0",
     "jsr:@xan/pipe@0.1": "0.1.0"
   },
@@ -25,16 +27,28 @@
         "jsr:@xan/observer"
       ]
     },
+    "@xan/observable@0.2.0": {
+      "integrity": "27b6e4450c48876e5a61f08a15941a49f94d0a9eecca05607eac7e630dbfee61",
+      "dependencies": [
+        "jsr:@xan/observer"
+      ]
+    },
+    "@xan/observable-materialize@0.2.0": {
+      "integrity": "0e91e8e5d77c72207eb4fc973d505ca6f6a889d6dc5eecbe674134031835095b",
+      "dependencies": [
+        "jsr:@xan/observable@0.2"
+      ]
+    },
     "@xan/observable-of@0.1.0": {
       "integrity": "bc7cdb9736de853b7f6dabc27ce2dce4ce940e268d8a835fffc4fb76ff97d38e",
       "dependencies": [
-        "jsr:@xan/observable"
+        "jsr:@xan/observable@0.1"
       ]
     },
     "@xan/observable-thrown@0.1.0": {
       "integrity": "8e4fd24762e5d5ae95d7a51b21a32e248b726cfdc4431ddef606b4b47f9bf74f",
       "dependencies": [
-        "jsr:@xan/observable"
+        "jsr:@xan/observable@0.1"
       ]
     },
     "@xan/observer@0.1.0": {
@@ -47,9 +61,10 @@
   "workspace": {
     "dependencies": [
       "jsr:@std/assert@^1.0.16",
+      "jsr:@xan/observable-materialize@0.2",
       "jsr:@xan/observable-of@0.1",
       "jsr:@xan/observable-thrown@0.1",
-      "jsr:@xan/observable@0.1",
+      "jsr:@xan/observable@0.2",
       "jsr:@xan/observer@0.1",
       "jsr:@xan/pipe@0.1"
     ]

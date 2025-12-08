@@ -5,26 +5,24 @@ import { map } from "./mod.ts";
 import { pipe } from "@xan/pipe";
 import { of } from "@xan/observable-of";
 import { thrown } from "@xan/observable-thrown";
+import { materialize, type Notification } from "@xan/observable-materialize";
 
 Deno.test("map should project the values", () => {
   // Arrange
-  const notifications: Array<["N", number] | ["R"] | ["T", unknown]> = [];
+  const notifications: Array<Notification<number>> = [];
   const indices: Array<number> = [];
-  const materialized = pipe(
+  const observable = pipe(
     of(1, 2, 3),
     map((value, index) => {
       indices.push(index);
       return value * 2;
     }),
+    materialize(),
   );
 
   // Act
-  materialized.subscribe(
-    new Observer({
-      next: (value) => notifications.push(["N", value]),
-      return: () => notifications.push(["R"]),
-      throw: (value) => notifications.push(["T", value]),
-    }),
+  observable.subscribe(
+    new Observer((notification) => notifications.push(notification)),
   );
 
   // Assert
@@ -35,19 +33,16 @@ Deno.test("map should project the values", () => {
 Deno.test("map should pump throws through itself", () => {
   // Arrange
   const error = new Error("test");
-  const notifications: Array<["N", number] | ["R"] | ["T", unknown]> = [];
+  const notifications: Array<Notification<number>> = [];
   const observable = pipe(
     thrown(error),
     map((value) => value * 2),
+    materialize(),
   );
 
   // Act
   observable.subscribe(
-    new Observer({
-      next: (value) => notifications.push(["N", value]),
-      return: () => notifications.push(["R"]),
-      throw: (value) => notifications.push(["T", value]),
-    }),
+    new Observer((notification) => notifications.push(notification)),
   );
 
   // Assert
@@ -56,19 +51,16 @@ Deno.test("map should pump throws through itself", () => {
 
 Deno.test("map should pump returns through itself", () => {
   // Arrange
-  const notifications: Array<["N", number] | ["R"] | ["T", unknown]> = [];
+  const notifications: Array<Notification<number>> = [];
   const observable = pipe(
     of(),
     map((value) => value * 2),
+    materialize(),
   );
 
   // Act
   observable.subscribe(
-    new Observer({
-      next: (value) => notifications.push(["N", value]),
-      return: () => notifications.push(["R"]),
-      throw: (value) => notifications.push(["T", value]),
-    }),
+    new Observer((notification) => notifications.push(notification)),
   );
 
   // Assert
@@ -100,21 +92,18 @@ Deno.test("map should handle unsubscribe", () => {
 Deno.test("map should throw if the project function throws", () => {
   // Arrange
   const error = new Error("test");
-  const notifications: Array<["N", number] | ["R"] | ["T", unknown]> = [];
+  const notifications: Array<Notification<number>> = [];
   const observable = pipe(
     of(1),
     map(() => {
       throw error;
     }),
+    materialize(),
   );
 
   // Act
   observable.subscribe(
-    new Observer({
-      next: (value) => notifications.push(["N", value]),
-      return: () => notifications.push(["R"]),
-      throw: (value) => notifications.push(["T", value]),
-    }),
+    new Observer((notification) => notifications.push(notification)),
   );
 
   // Assert
